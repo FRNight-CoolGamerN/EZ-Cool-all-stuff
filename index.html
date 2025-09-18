@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EZ-Cool</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap');
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background: linear-gradient(135deg, #181c20 0%, #23272f 100%);
+      color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    header {
+      background: rgba(35,39,47,0.98);
+      padding: 2.5rem 1rem 1.5rem 1rem;
+      text-align: center;
+      box-shadow: 0 2px 24px 0 #00eaff44;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      animation: headerGlow 2.5s infinite alternate;
+    }
+    @keyframes headerGlow {
+      0% { box-shadow: 0 2px 24px 0 #00eaff44; }
+      100% { box-shadow: 0 2px 48px 0 #00eaffcc; }
+    }
+    header h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2.7rem;
+      letter-spacing: 2.5px;
+      font-family: 'Orbitron', 'Roboto', Arial, sans-serif;
+      color: #00eaff;
+      text-shadow: 0 0 16px #00eaff88, 0 2px 0 #181c20;
+      animation: titlePop 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+    }
+    @keyframes titlePop {
+      0% { transform: scale(0.7) rotate(-8deg); opacity: 0; }
+      80% { transform: scale(1.1) rotate(2deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0); }
+    }
+    header p {
+      margin: 0;
+      color: #b0b0b0;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      opacity: 0.85;
+    }
+    main {
+      max-width: 650px;
+      margin: 2.5rem auto 2rem auto;
+      background: rgba(35,39,47,0.98);
+      border-radius: 18px;
+      box-shadow: 0 4px 32px 0 #00eaff22;
+      padding: 2.5rem 1.5rem 2rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .link-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .link-list li {
+      margin: 1.5rem 0;
+      background: linear-gradient(90deg, #23272f 60%, #00eaff22 100%);
+      border-radius: 12px;
+      box-shadow: 0 2px 16px 0 #00eaff11;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(40px) scale(0.98);
+      animation: fadeInUp 1s cubic-bezier(.68,-0.55,.27,1.55) forwards;
+    }
+    .link-list li:nth-child(1) { animation-delay: 0.2s; }
+    .link-list li:nth-child(2) { animation-delay: 0.4s; }
+    .link-list li:nth-child(3) { animation-delay: 0.6s; }
+    .link-list li:nth-child(4) { animation-delay: 0.8s; }
+    .link-list li:nth-child(5) { animation-delay: 1.0s; }
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+      80% { opacity: 1; transform: translateY(-6px) scale(1.03); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .link-list li:hover {
+      background: linear-gradient(90deg, #23272f 40%, #00eaff55 100%);
+      box-shadow: 0 4px 32px 0 #00eaff44;
+      transform: scale(1.025);
+      transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+    }
+    .link-list a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.3rem 1.7rem;
+      color: #7fd7ff;
+      text-decoration: none;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      position: relative;
+      transition: color 0.2s;
+      z-index: 1;
+      background: none;
+    }
+    .link-list a::before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #00eaff44 0%, #00eaff11 100%);
+      z-index: -1;
+      transition: width 0.4s cubic-bezier(.68,-0.55,.27,1.55);
+      border-radius: 12px 0 0 12px;
+    }
+    .link-list a:hover::before {
+      width: 100%;
+    }
+    .link-list a:hover {
+      color: #fff;
+      text-shadow: 0 0 8px #00eaffcc;
+    }
+    .desc {
+      color: #b0eaff;
+      font-size: 1.05rem;
+      margin: 0 0 0.7rem 2.5rem;
+      opacity: 0.85;
+      transition: color 0.2s;
+    }
+    .link-list li:hover .desc {
+      color: #fff;
+      opacity: 1;
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+      background: #23272f;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #00eaff44;
+      border-radius: 8px;
+    }
+    /* Responsive */
+    @media (max-width: 700px) {
+      main {
+        margin: 1rem;
+        padding: 1rem;
+      }
+      header h1 {
+        font-size: 2rem;
+      }
+      .link-list a {
+        font-size: 1.05rem;
+        padding: 1rem 1rem;
+      }
+      .desc {
+        margin-left: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>EZ-Cool</h1>
+  </header>
+  <main>
+    <ul class="link-list">
+      <li>
+        <a href="https://discord.gg/9qrgCwEdFf" target="_blank">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;"><circle cx="16" cy="16" r="16" fill="#5865F2"/><path d="M24.5 23c-1.1-1.3-2.1-2.7-3-4.1.5-.2 1-.5 1.4-.8.2-.2.3-.5.2-.8-.2-.5-.4-1-.7-1.5-.2-.3-.5-.4-.8-.3-.2.1-.4.2-.6.3-.7.3-1.4.5-2.1.5s-1.4-.2-2.1-.5c-.2-.1-.4-.2-.6-.3-.3-.1-.6 0-.8.3-.3.5-.5 1-.7 1.5-.1.3 0 .6.2.8.4.3.9.6 1.4.8-.9 1.4-1.9 2.8-3 4.1-.2.2-.2.5-.1.7.2.3.5.5.8.5h12c.3 0 .6-.2.8-.5.1-.2.1-.5-.1-.7z" fill="#fff"/></svg>
+          Join my Discord
+        </a>
+        <div class="desc">Join my Discord server for updates, chat, and more.</div>
+      </li>
+      <li>
+        <a href="https://frnight-coolgamern.github.io/Cool-Rock-Paper-Scissors/" target="_blank">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;"><circle cx="16" cy="16" r="16" fill="#ffb347"/><text x="8" y="22" font-size="14" font-family="Arial" fill="#fff">✊✋✌️</text></svg>
+          Cool Rock Paper Scissors
+        </a>
+        <div class="desc">A fun rock-paper-scissors game. Play now!</div>
+      </li>
+      <li>
+        <a href="https://super_recorder.playcode.io/" target="_blank">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;"><circle cx="16" cy="16" r="16" fill="#ff5e62"/><rect x="10" y="10" width="12" height="12" rx="3" fill="#fff"/></svg>
+          Super Recorder
+        </a>
+        <div class="desc">Record audio easily in your browser.</div>
+      </li>
+      <li>
+        <a href="https://ezyt_thumbnail.playcode.io/" target="_blank">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;"><circle cx="16" cy="16" r="16" fill="#00eaff"/><rect x="8" y="12" width="16" height="8" rx="2" fill="#fff"/><rect x="12" y="16" width="8" height="2" rx="1" fill="#00eaff"/></svg>
+          EZYT Thumbnail
+        </a>
+        <div class="desc">Quickly create YouTube thumbnails online.</div>
+      </li>
+      <li>
+        <a href="https://frnight-coolgamern.github.io/FR-YT/" target="_blank">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;"><circle cx="16" cy="16" r="16" fill="#ff4444"/><polygon points="13,11 23,16 13,21" fill="#fff"/></svg>
+          YouTube Downloader
+        </a>
+        <div class="desc">Download YouTube videos easily.</div>
+      </li>
+    </ul>
+  </main>
+</body>
+</html>
+<script>
+// Scroll reveal animation for list items
+document.addEventListener('DOMContentLoaded', function() {
+  const items = document.querySelectorAll('.link-list li');
+  const reveal = () => {
+    const trigger = window.innerHeight * 0.92;
+    items.forEach(item => {
+      const rect = item.getBoundingClientRect();
+      if (rect.top < trigger) {
+        item.style.animationPlayState = 'running';
+      }
+    });
+  };
+  window.addEventListener('scroll', reveal);
+  reveal();
+});
+</script>
