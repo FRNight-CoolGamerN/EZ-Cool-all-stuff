@@ -3,231 +3,1613 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EZ-Cool</title>
+  <title>YouTube Showcase - Login Required</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap');
-    html {
-      scroll-behavior: smooth;
+    /* Login Styles */
+    .login-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      font-family: 'Arial', sans-serif;
     }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .login-container h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #4a4a4a;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .login-btn:hover {
+      background: #5a6fd8;
+    }
+
+    #loginMessage {
+      margin-top: 1rem;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .success { color: #28a745; }
+    .error { color: #dc3545; }
+
+    /* Main Content Styles */
     body {
-      font-family: 'Roboto', Arial, sans-serif;
-      background: linear-gradient(135deg, #181c20 0%, #23272f 100%);
-      color: #f5f5f5;
+      font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
-      min-height: 100vh;
+      background: #121212;
+      color: #ffffff;
       overflow-x: hidden;
     }
+
+    #mainContent {
+      display: none;
+    }
+
     header {
-      background: rgba(35,39,47,0.98);
-      padding: 2.5rem 1rem 1.5rem 1rem;
+      background: #1a1a1a;
+      padding: 1rem;
       text-align: center;
-      box-shadow: 0 2px 24px 0 #00eaff44;
-      position: sticky;
+      position: fixed;
+      width: 100%;
       top: 0;
-      z-index: 10;
-      animation: headerGlow 2.5s infinite alternate;
+      z-index: 1000;
     }
-    @keyframes headerGlow {
-      0% { box-shadow: 0 2px 24px 0 #00eaff44; }
-      100% { box-shadow: 0 2px 48px 0 #00eaffcc; }
-    }
+
     header h1 {
-      margin: 0 0 0.5rem 0;
-      font-size: 2.7rem;
-      letter-spacing: 2.5px;
-      font-family: 'Orbitron', 'Roboto', Arial, sans-serif;
-      color: #00eaff;
-      text-shadow: 0 0 16px #00eaff88, 0 2px 0 #181c20;
-      animation: titlePop 1.2s cubic-bezier(.68,-0.55,.27,1.55);
-    }
-    @keyframes titlePop {
-      0% { transform: scale(0.7) rotate(-8deg); opacity: 0; }
-      80% { transform: scale(1.1) rotate(2deg); opacity: 1; }
-      100% { transform: scale(1) rotate(0); }
-    }
-    header p {
       margin: 0;
-      color: #b0b0b0;
-      font-size: 1.1rem;
-      letter-spacing: 1px;
-      opacity: 0.85;
+      color: #ffffff;
     }
-    main {
-      max-width: 650px;
-      margin: 2.5rem auto 2rem auto;
-      background: rgba(35,39,47,0.98);
-      border-radius: 18px;
-      box-shadow: 0 4px 32px 0 #00eaff22;
-      padding: 2.5rem 1.5rem 2rem 1.5rem;
-      position: relative;
-      overflow: hidden;
+
+    nav {
+      margin-top: 1rem;
     }
-    .link-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+
+    .nav-btn {
+      display: inline-block;
+      margin: 0 0.5rem;
+      text-decoration: none;
     }
-    .link-list li {
-      margin: 1.5rem 0;
-      background: linear-gradient(90deg, #23272f 60%, #00eaff22 100%);
+
+    .discord-btn, .youtube-btn {
+      width: 70px;
+      height: 70px;
       border-radius: 12px;
-      box-shadow: 0 2px 16px 0 #00eaff11;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
       overflow: hidden;
-      opacity: 0;
-      transform: translateY(40px) scale(0.98);
-      animation: fadeInUp 1s cubic-bezier(.68,-0.55,.27,1.55) forwards;
     }
-    .link-list li:nth-child(1) { animation-delay: 0.2s; }
-    .link-list li:nth-child(2) { animation-delay: 0.4s; }
-    .link-list li:nth-child(3) { animation-delay: 0.6s; }
-    .link-list li:nth-child(4) { animation-delay: 0.8s; }
-    .link-list li:nth-child(5) { animation-delay: 1.0s; }
-    @keyframes fadeInUp {
-      0% { opacity: 0; transform: translateY(40px) scale(0.98); }
-      80% { opacity: 1; transform: translateY(-6px) scale(1.03); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
+
+    .discord-btn {
+      background: #343a79;
+      box-shadow: 0 4px 10px rgba(88, 101, 242, 0.4);
     }
-    .link-list li:hover {
-      background: linear-gradient(90deg, #23272f 40%, #00eaff55 100%);
-      box-shadow: 0 4px 32px 0 #00eaff44;
-      transform: scale(1.025);
-      transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+
+    .youtube-btn {
+      background: #911e1e;
+      box-shadow: 0 4px 10px rgba(255, 0, 0, 0.4);
     }
-    .link-list a {
+
+    .nav-btn img {
+      width: 38px;
+      height: 38px;
+      transition: transform 0.3s ease;
+    }
+
+    .discord-btn:hover {
+      transform: rotate(-6deg) scale(1.1);
+      box-shadow: 0 8px 20px rgba(88, 101, 242, 0.6);
+    }
+
+    .youtube-btn:hover {
+      transform: rotate(6deg) scale(1.1);
+      box-shadow: 0 8px 20px rgba(255, 0, 0, 0.6);
+    }
+
+    .nav-btn:hover img {
+      transform: scale(1.2);
+    }
+
+    main {
+      margin-top: 120px;
+      padding: 2rem;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #cccccc;
+    }
+
+    .content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .video-container, .video-gallery, .about, .html-showcase {
+      margin-bottom: 3rem;
+      padding: 2rem;
+      background: #1a1a1a;
+      border-radius: 10px;
+      position: relative;
+      transition: all 0.5s ease;
+    }
+
+    .video-container iframe {
+      width: 100%;
+      max-width: 560px;
+      height: 315px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    .gallery iframe {
+      width: 100%;
+      height: 200px;
+    }
+
+    .video-placeholder {
+      width: 300px;
+      height: 200px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .video-placeholder p {
+      margin: 5px 0;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .fly-element {
+      opacity: 1;
+      transform: translateY(0) rotate(0deg);
+      transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    }
+
+    .fly-element.fly-away {
+      opacity: 0.2;
+      transform: translateY(-30px) rotate(-5deg);
+      box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .fly-element.fly-away::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 2s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.05); opacity: 1; }
+    }
+
+    .fly-element.fly-back {
+      opacity: 1;
+      transform: translateY(0) rotate(0deg);
+      box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    }
+
+    .fly-element.fly-back::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 2s ease-in-out infinite reverse;
+      pointer-events: none;
+    }
+
+    .about {
+      text-align: center;
+    }
+
+    .code-examples {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .code-example {
+      background: #2a2a2a;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .code-example h4 {
+      margin: 0;
+      padding: 1rem;
+      background: #333;
+      color: #fff;
+    }
+
+    .code-preview {
+      padding: 1rem;
+      background: #fff;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .code-code {
+      padding: 1rem;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      position: relative;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: linear-gradient(135deg, #007acc, #005aa3);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 122, 204, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .copy-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 122, 204, 0.5);
+      background: linear-gradient(135deg, #005aa3, #004080);
+    }
+
+    .copy-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(0, 122, 204, 0.3);
+    }
+
+    /* Services Section */
+    .services {
+      text-align: center;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .service-card {
+      background: #f8f9fa;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .service-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .service-card h4 {
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .service-card p {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* Stats Section */
+    .stats {
+      text-align: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 15px;
+      margin: 3rem 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .stat-label {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    /* Team Section */
+    .team {
+      text-align: center;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .team-member {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .member-avatar {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .team-member h4 {
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .member-role {
+      color: #007bff;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .team-member p {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* Testimonials Section */
+    .testimonials {
+      text-align: center;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .testimonial-card {
+      background: #f8f9fa;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .testimonial-content {
+      font-style: italic;
+      color: #555;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .testimonial-content:before {
+      content: '"';
+      font-size: 4rem;
+      color: #007bff;
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      opacity: 0.3;
+    }
+
+    .testimonial-author {
+      text-align: left;
+    }
+
+    .testimonial-author strong {
+      color: #333;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .testimonial-author span {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    /* Contact Section */
+    .contact {
+      text-align: center;
+    }
+
+    .contact-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 3rem;
+      margin-top: 2rem;
+      align-items: start;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-item {
       display: flex;
       align-items: center;
       gap: 1rem;
-      padding: 1.3rem 1.7rem;
-      color: #7fd7ff;
-      text-decoration: none;
-      font-size: 1.25rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      position: relative;
-      transition: color 0.2s;
-      z-index: 1;
-      background: none;
+      text-align: left;
     }
-    .link-list a::before {
-      content: '';
-      display: block;
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(90deg, #00eaff44 0%, #00eaff11 100%);
-      z-index: -1;
-      transition: width 0.4s cubic-bezier(.68,-0.55,.27,1.55);
-      border-radius: 12px 0 0 12px;
+
+    .contact-icon {
+      font-size: 2rem;
+      min-width: 2rem;
     }
-    .link-list a:hover::before {
+
+    .contact-form {
+      background: #f8f9fa;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+
+    .submit-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
       width: 100%;
     }
-    .link-list a:hover {
-      color: #fff;
-      text-shadow: 0 0 8px #00eaffcc;
+
+    .submit-btn:hover {
+      background: #0056b3;
     }
-    .desc {
-      color: #b0eaff;
-      font-size: 1.05rem;
-      margin: 0 0 0.7rem 2.5rem;
-      opacity: 0.85;
-      transition: color 0.2s;
+
+    /* Enhanced Scroll Animations */
+    .fly-element {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease-out;
     }
-    .link-list li:hover .desc {
-      color: #fff;
+
+    .fly-element.visible {
       opacity: 1;
+      transform: translateY(0);
     }
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 10px;
-      background: #23272f;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #00eaff44;
-      border-radius: 8px;
-    }
-    /* Responsive */
-    @media (max-width: 700px) {
-      main {
-        margin: 1rem;
-        padding: 1rem;
+
+    /* Responsive Design Enhancements */
+    @media (max-width: 768px) {
+      .services-grid,
+      .team-grid,
+      .testimonials-grid {
+        grid-template-columns: 1fr;
       }
-      header h1 {
+
+      .contact-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .stat-number {
         font-size: 2rem;
       }
-      .link-list a {
-        font-size: 1.05rem;
-        padding: 1rem 1rem;
-      }
-      .desc {
-        margin-left: 1.2rem;
-      }
+    }
+
+    /* Portfolio Section */
+    .portfolio {
+      text-align: center;
+    }
+
+    .portfolio-intro {
+      color: #666;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .portfolio-item {
+      background: #f8f9fa;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: left;
+    }
+
+    .portfolio-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .portfolio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .portfolio-header h4 {
+      margin: 0;
+      color: #333;
+    }
+
+    .portfolio-tag {
+      background: #007bff;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .portfolio-description {
+      color: #666;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .portfolio-link {
+      display: inline-block;
+      background: #28a745;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+      font-weight: bold;
+    }
+
+    .portfolio-link:hover {
+      background: #218838;
+      text-decoration: none;
+      color: white;
+    }
+
+    /* Achievements Section */
+    .achievements {
+      text-align: center;
+    }
+
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .achievement-item {
+      display: flex;
+      align-items: center;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+    }
+
+    .achievement-icon {
+      font-size: 3rem;
+      margin-right: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .achievement-content {
+      text-align: left;
+    }
+
+    .achievement-content h4 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.2rem;
+    }
+
+    .achievement-content p {
+      margin: 0 0 0.5rem 0;
+      opacity: 0.9;
+      line-height: 1.5;
+    }
+
+    .achievement-year {
+      background: rgba(255,255,255,0.2);
+      padding: 0.25rem 0.75rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    /* FAQ Section */
+    .faq {
+      text-align: center;
+    }
+
+    .faq-container {
+      max-width: 800px;
+      margin: 2rem auto;
+    }
+
+    .faq-item {
+      background: #f8f9fa;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .faq-question {
+      padding: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      color: #333;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: #e9ecef;
+    }
+
+    .faq-icon {
+      margin-right: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .faq-answer {
+      padding: 0 1.5rem 1.5rem 1.5rem;
+      color: #666;
+      line-height: 1.6;
+      display: none;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    /* Social Media Section */
+    .social-media {
+      text-align: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 15px;
+      margin: 3rem 0;
+    }
+
+    .social-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,0.1);
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-decoration: none;
+      color: white;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .social-link:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .social-icon {
+      font-size: 2rem;
+      margin-right: 1rem;
+    }
+
+    .social-text {
+      font-weight: bold;
+      margin-right: auto;
+    }
+
+    .social-handle {
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+
+    /* Newsletter Section */
+    .newsletter {
+      text-align: center;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      color: #333;
+      padding: 3rem 2rem;
+      border-radius: 15px;
+      margin: 3rem 0;
+    }
+
+    .newsletter-form {
+      max-width: 600px;
+      margin: 2rem auto 0;
+    }
+
+    .newsletter-input-group {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .newsletter-input-group input {
+      flex: 1;
+      padding: 1rem;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .newsletter-btn {
+      background: #333;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .newsletter-btn:hover {
+      background: #555;
+    }
+
+    .newsletter-features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .feature-item {
+      background: rgba(255,255,255,0.8);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>EZ-Cool</h1>
-  </header>
-  <main>
-    <ul class="link-list">
-      <li>
-        <a href="https://discord.gg/qgmF6zbqDp" target="_blank">
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;"><circle cx="16" cy="16" r="16" fill="#5865F2"/><path d="M24.5 23c-1.1-1.3-2.1-2.7-3-4.1.5-.2 1-.5 1.4-.8.2-.2.3-.5.2-.8-.2-.5-.4-1-.7-1.5-.2-.3-.5-.4-.8-.3-.2.1-.4.2-.6.3-.7.3-1.4.5-2.1.5s-1.4-.2-2.1-.5c-.2-.1-.4-.2-.6-.3-.3-.1-.6 0-.8.3-.3.5-.5 1-.7 1.5-.1.3 0 .6.2.8.4.3.9.6 1.4.8-.9 1.4-1.9 2.8-3 4.1-.2.2-.2.5-.1.7.2.3.5.5.8.5h12c.3 0 .6-.2.8-.5.1-.2.1-.5-.1-.7z" fill="#fff"/></svg>
-          Join my Discord
+  <!-- Login Overlay -->
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-container">
+      <h1>Welcome to YouTube Showcase</h1>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="country">Country:</label>
+          <select id="country" name="country" required>
+            <option value="">Select Country</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="state">State/Province:</label>
+          <select id="state" name="state">
+            <option value="">Select State/Province</option>
+          </select>
+        </div>
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+      <div id="loginMessage"></div>
+    </div>
+  </div>
+
+  <!-- Main Content (Hidden until login) -->
+  <div id="mainContent">
+    <header>
+      <h1>YouTube Channel Showcase</h1>
+      <nav>
+        <a href="https://discord.gg/df4dG84Suh" target="_blank" class="nav-btn discord-btn">
+          <img src="https://i.postimg.cc/dVB8yMvp/discord.png" alt="Discord">
         </a>
-        <div class="desc">Join my Discord server for updates, chat, and more.</div>
-      </li>
-      <li>
-        <a href="https://frnight-coolgamern.github.io/Cool-Rock-Paper-Scissors/" target="_blank">
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;"><circle cx="16" cy="16" r="16" fill="#ffb347"/><text x="8" y="22" font-size="14" font-family="Arial" fill="#fff">✊✋✌️</text></svg>
-          Cool Rock Paper Scissors
+        <a href="https://www.youtube.com/@EZ-Code-official" target="_blank" class="nav-btn youtube-btn">
+          <img src="https://storage.imgbly.com/imgbly/u4N7BcNk2j.png" alt="YouTube">
         </a>
-        <div class="desc">A fun rock-paper-scissors game. Play now!</div>
-      </li>
-      <li>
-        <a href="https://super_recorder.playcode.io/" target="_blank">
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;"><circle cx="16" cy="16" r="16" fill="#ff5e62"/><rect x="10" y="10" width="12" height="12" rx="3" fill="#fff"/></svg>
-          Super Recorder
-        </a>
-        <div class="desc">Record audio easily in your browser.</div>
-      </li>
-      <li>
-        <a href="https://ezyt_thumbnail.playcode.io/" target="_blank">
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;"><circle cx="16" cy="16" r="16" fill="#00eaff"/><rect x="8" y="12" width="16" height="8" rx="2" fill="#fff"/><rect x="12" y="16" width="8" height="2" rx="1" fill="#00eaff"/></svg>
-          EZYT Thumbnail
-        </a>
-        <div class="desc">Quickly create YouTube thumbnails online.</div>
-      </li>
-      <li>
-        <a href="https://frnight-coolgamern.github.io/FR-YT/" target="_blank">
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;"><circle cx="16" cy="16" r="16" fill="#ff4444"/><polygon points="13,11 23,16 13,21" fill="#fff"/></svg>
-          YouTube Downloader
-        </a>
-        <div class="desc">Download YouTube videos easily.</div>
-      </li>
-    </ul>
-  </main>
-</body>
-</html>
-<script>
-// Scroll reveal animation for list items
-document.addEventListener('DOMContentLoaded', function() {
-  const items = document.querySelectorAll('.link-list li');
-  const reveal = () => {
-    const trigger = window.innerHeight * 0.92;
-    items.forEach(item => {
-      const rect = item.getBoundingClientRect();
-      if (rect.top < trigger) {
-        item.style.animationPlayState = 'running';
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h2>Discover Amazing Content</h2>
+        <p>Explore our curated YouTube channels and videos</p>
+      </section>
+
+      <section class="content">
+        <div class="video-container fly-element">
+          <h3>Featured Video</h3>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/jNQXAC9IVRw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+        </div>
+
+        <div class="video-gallery fly-element">
+          <h3>FNCreationTeam Videos</h3>
+          <div class="gallery">
+            <iframe width="300" height="200" src="https://www.youtube.com/embed/lRBFn3Lwf30?si=gvgf68a7LTPFgseL" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+            <iframe width="300" height="200" src="https://www.youtube.com/embed/FNixW2N2VSg?si=demvLIb7AUwscq5j" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+            <iframe width="300" height="200" src="https://www.youtube.com/embed/j-nDuhbktkw?si=9q8O0PRFx8XzR6Gs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+            <iframe width="300" height="200" src="https://www.youtube.com/embed/6p_IGb_9HkE?si=Z5cDB-upwVOB6M5p" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+            <iframe width="300" height="200" src="https://www.youtube.com/embed/G-LQZGEQbjk?si=HM9cymOPRs_nCwPl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+            <iframe width="300" height="200" src="https://www.youtube.com/embed/yDQHF6zL0ig?si=ie7AIc6wR80ok2fU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+            <iframe width="300" height="200" src="https://www.youtube.com/embed/d8wp04DoXEs?si=gthnQl8XvPf66Tmb" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+            <iframe width="300" height="200" src="https://www.youtube.com/embed/ojVt2fVxGp8?si=X89AhhAqJrTwhmXN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+          </div>
+        </div>
+
+        <div class="about fly-element">
+          <h3>About Us</h3>
+          <p>We are passionate content creators dedicated to bringing you the best entertainment and educational content across various topics. Join our community and stay updated with our latest videos!</p>
+        </div>
+
+        <div class="services fly-element">
+          <h3>Our Services</h3>
+          <div class="services-grid">
+            <div class="service-card">
+              <div class="service-icon">🎬</div>
+              <h4>Video Production</h4>
+              <p>High-quality video content creation for YouTube, social media, and advertising campaigns.</p>
+            </div>
+            <div class="service-card">
+              <div class="service-icon">📱</div>
+              <h4>Social Media Management</h4>
+              <p>Strategic social media content planning, posting, and community engagement across all platforms.</p>
+            </div>
+            <div class="service-card">
+              <div class="service-icon">🎨</div>
+              <h4>Content Creation</h4>
+              <p>Creative content development including scripts, thumbnails, and engaging visual elements.</p>
+            </div>
+            <div class="service-card">
+              <div class="service-icon">📊</div>
+              <h4>Analytics & Growth</h4>
+              <p>Data-driven insights and strategies to grow your online presence and engagement.</p>
+            </div>
+            <div class="service-card">
+              <div class="service-icon">🎯</div>
+              <h4>Brand Strategy</h4>
+              <p>Comprehensive branding solutions to establish your unique identity in the digital space.</p>
+            </div>
+            <div class="service-card">
+              <div class="service-icon">🚀</div>
+              <h4>Digital Marketing</h4>
+              <p>SEO optimization, paid advertising, and marketing campaigns to boost your visibility.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats fly-element">
+
+        <div class="team fly-element">
+          <h3>Meet Our Team</h3>
+          <div class="team-grid">
+            <div class="team-member">
+              <div class="member-avatar">👨‍💼</div>
+              <h4>John Smith</h4>
+              <p class="member-role">Creative Director</p>
+              <p>Leading creative vision and content strategy for all our projects.</p>
+            </div>
+            <div class="team-member">
+              <div class="member-avatar">👩‍🎥</div>
+              <h4>Sarah Johnson</h4>
+              <p class="member-role">Video Producer</p>
+              <p>Expert in video production, editing, and post-production workflows.</p>
+            </div>
+            <div class="team-member">
+              <div class="member-avatar">👨‍💻</div>
+              <h4>Mike Chen</h4>
+              <p class="member-role">Digital Strategist</p>
+              <p>Driving digital growth through analytics, SEO, and social media strategy.</p>
+            </div>
+            <div class="team-member">
+              <div class="member-avatar">👩‍🎨</div>
+              <h4>Emma Davis</h4>
+              <p class="member-role">Graphic Designer</p>
+              <p>Creating stunning visuals, thumbnails, and brand materials.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonials fly-element">
+          <h3>What Our Clients Say</h3>
+          <div class="testimonials-grid">
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                "FNCreationTeam transformed our brand presence completely. Their creative approach and attention to detail exceeded our expectations."
+              </div>
+              <div class="testimonial-author">
+                <strong>TechCorp Inc.</strong><br>
+                <span>Marketing Director</span>
+              </div>
+            </div>
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                "Working with FNCreationTeam was a game-changer for our YouTube channel. Our subscriber count doubled in just 3 months!"
+              </div>
+              <div class="testimonial-author">
+                <strong>Content Creator</strong><br>
+                <span>Lifestyle Blogger</span>
+              </div>
+            </div>
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                "Professional, creative, and results-driven. FNCreationTeam delivered exactly what we needed for our product launch campaign."
+              </div>
+              <div class="testimonial-author">
+                <strong>StartupXYZ</strong><br>
+                <span>CEO & Founder</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="portfolio fly-element">
+          <h3>Our Projects & Websites</h3>
+          <p class="portfolio-intro">Explore our collection of interactive web applications and creative projects</p>
+          <div class="portfolio-grid">
+            <div class="portfolio-item">
+              <div class="portfolio-header">
+                <h4>🎮 Cool Rock Paper Scissors</h4>
+                <span class="portfolio-tag">Game</span>
+              </div>
+              <div class="portfolio-description">
+                An enhanced version of the classic Rock Paper Scissors game with modern UI and animations.
+              </div>
+              <div class="portfolio-links">
+                <a href="https://frnight-coolgamern.github.io/Cool-Rock-Paper-Scissors/" target="_blank" class="portfolio-link">🎯 Play Game</a>
+              </div>
+            </div>
+
+            <div class="portfolio-item">
+              <div class="portfolio-header">
+                <h4>🎙️ Super Recorder</h4>
+                <span class="portfolio-tag">Tool</span>
+              </div>
+              <div class="portfolio-description">
+                Advanced audio recording tool with professional features for content creators.
+              </div>
+              <div class="portfolio-links">
+                <a href="https://super_recorder.playcode.io/" target="_blank" class="portfolio-link">🎤 Try Tool</a>
+              </div>
+            </div>
+
+            <div class="portfolio-item">
+              <div class="portfolio-header">
+                <h4>🖼️ EZ Thumbnail Maker</h4>
+                <span class="portfolio-tag">Design</span>
+              </div>
+              <div class="portfolio-description">
+                Easy-to-use thumbnail creation tool for YouTube videos and social media content.
+              </div>
+              <div class="portfolio-links">
+                <a href="https://ezyt_thumbnail.playcode.io/" target="_blank" class="portfolio-link">🎨 Create Thumbnails</a>
+              </div>
+            </div>
+
+            <div class="portfolio-item">
+              <div class="portfolio-header">
+                <h4>📺 FR YouTube Tools</h4>
+                <span class="portfolio-tag">Utility</span>
+              </div>
+              <div class="portfolio-description">
+                Comprehensive YouTube utility tools for content creators and channel management.
+              </div>
+              <div class="portfolio-links">
+                <a href="https://frnight-coolgamern.github.io/FR-YT/" target="_blank" class="portfolio-link">📊 YouTube Tools</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq fly-element">
+          <h3>Frequently Asked Questions</h3>
+          <div class="faq-container">
+            <div class="faq-item">
+              <div class="faq-question">
+                <span class="faq-icon">❓</span>
+                How do you create engaging YouTube content?
+              </div>
+              <div class="faq-answer">
+                We focus on understanding our audience's interests, creating high-quality content with professional production values, and maintaining consistent posting schedules. Our analytics-driven approach helps us create content that resonates with viewers.
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span class="faq-icon">💻</span>
+                What technologies do you use for web development?
+              </div>
+              <div class="faq-answer">
+                We specialize in modern web technologies including HTML5, CSS3, JavaScript, React, Node.js, and various frameworks. We also work with game development, audio processing, and creative design tools.
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span class="faq-icon">📈</span>
+                How do you grow online communities?
+              </div>
+              <div class="faq-answer">
+                Community growth comes from authentic engagement, valuable content, consistent branding, and active participation. We use data analytics to understand what works and continuously optimize our strategies.
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span class="faq-icon">🤝</span>
+                Do you offer custom development services?
+              </div>
+              <div class="faq-answer">
+                Yes! We provide custom web development, content creation, digital marketing, and consulting services. Contact us to discuss your specific project needs and requirements.
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span class="faq-icon">🎯</span>
+                What's your approach to social media marketing?
+              </div>
+              <div class="faq-answer">
+                Our social media strategy focuses on authentic engagement, targeted content creation, and data-driven optimization. We create content calendars, manage multiple platforms, and track performance metrics to ensure maximum impact.
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span class="faq-icon">📊</span>
+                How do you measure content success?
+              </div>
+              <div class="faq-answer">
+                We track multiple KPIs including views, engagement rates, subscriber growth, audience retention, and conversion metrics. Our analytics approach helps us understand what content performs best and how to improve.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="social-media fly-element">
+          <h3>Follow Us</h3>
+          <p>Stay connected and join our growing community across all platforms</p>
+          <div class="social-links">
+            <a href="https://www.youtube.com/@FNCreationTeam" target="_blank" class="social-link youtube">
+              <span class="social-icon">📺</span>
+              <span class="social-text">YouTube</span>
+              <span class="social-handle">@FNCreationTeam</span>
+            </a>
+            <a href="https://github.com/frnight-coolgamern" target="_blank" class="social-link github">
+              <span class="social-icon">💻</span>
+              <span class="social-text">GitHub</span>
+              <span class="social-handle">frnight-coolgamern</span>
+            </a>
+            <a href="https://discord.gg/df4dG84Suh" target="_blank" class="social-link discord">
+              <span class="social-icon">💬</span>
+              <span class="social-text">Discord</span>
+              <span class="social-handle">FNCreationTeam</span>
+            </a>
+            </a>
+          </div>
+        </div>
+        <div class="contact fly-element">
+          <h3>Contact Us</h3>
+          <div class="contact-content">
+            <div class="contact-info">
+              <div class="contact-item">
+                <div class="contact-icon">📧</div>
+                <div>
+                  <strong>Email:</strong><br>
+                  ezcodeverify@gmail.com
+
+                </div>
+              </div>
+              <div class="contact-item">
+                <div>
+                </div>
+              </div>
+                <div>
+              </div>
+            </div>
+            <div class="contact-form">
+              <form id="contactForm">
+                <div class="form-group">
+                  <input type="text" id="contactName" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                  <input type="email" id="contactEmail" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                  <input type="text" id="contactSubject" placeholder="Subject" required>
+                </div>
+                <div class="form-group">
+                  <textarea id="contactMessage" placeholder="Your Message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+  <script>
+    // Countries data
+    const countries = [
+      { name: 'United States', states: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'] },
+      { name: 'Canada', states: ['Alberta', 'British Columbia', 'Manitoba', 'New Brunswick', 'Newfoundland and Labrador', 'Northwest Territories', 'Nova Scotia', 'Nunavut', 'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon'] },
+      { name: 'United Kingdom', states: ['England', 'Scotland', 'Wales', 'Northern Ireland'] },
+      { name: 'Australia', states: ['Australian Capital Territory', 'New South Wales', 'Northern Territory', 'Queensland', 'South Australia', 'Tasmania', 'Victoria', 'Western Australia'] },
+      { name: 'Germany', states: ['Baden-Württemberg', 'Bavaria', 'Berlin', 'Brandenburg', 'Bremen', 'Hamburg', 'Hesse', 'Lower Saxony', 'Mecklenburg-Vorpommern', 'North Rhine-Westphalia', 'Rhineland-Palatinate', 'Saarland', 'Saxony', 'Saxony-Anhalt', 'Schleswig-Holstein', 'Thuringia'] },
+      { name: 'France', states: ['Auvergne-Rhône-Alpes', 'Bourgogne-Franche-Comté', 'Brittany', 'Centre-Val de Loire', 'Corsica', 'Grand Est', 'Hauts-de-France', 'Île-de-France', 'Normandy', 'Nouvelle-Aquitaine', 'Occitanie', 'Pays de la Loire', 'Provence-Alpes-Côte d\'Azur'] },
+      { name: 'Other', states: [] }
+    ];
+
+    // Populate country dropdown
+    const countrySelect = document.getElementById('country');
+    const stateSelect = document.getElementById('state');
+
+    countries.forEach(country => {
+      const option = document.createElement('option');
+      option.value = country.name;
+      option.textContent = country.name;
+      countrySelect.appendChild(option);
+    });
+
+    countrySelect.addEventListener('change', () => {
+      const selectedCountry = countries.find(c => c.name === countrySelect.value);
+      stateSelect.innerHTML = '<option value="">Select State/Province</option>';
+      if (selectedCountry && selectedCountry.states.length > 0) {
+        selectedCountry.states.forEach(state => {
+          const option = document.createElement('option');
+          option.value = state;
+          option.textContent = state;
+          stateSelect.appendChild(option);
+        });
       }
     });
-  };
-  window.addEventListener('scroll', reveal);
-  reveal();
-});
-</script>
 
+    // Login functionality
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const name = document.getElementById('name').value;
+      const country = document.getElementById('country').value;
+      const state = document.getElementById('state').value;
+
+      if (!email || !name || !country) {
+        showLoginMessage('Please fill in all required fields.', 'error');
+        return;
+      }
+
+      // Simulate successful login
+      showLoginMessage(`Welcome ${name}! You've successfully logged in from ${state ? `${state}, ` : ''}${country}. Enjoy exploring our content!`, 'success');
+
+      // Clear form
+      this.reset();
+
+      // Hide login and show main content after a delay
+      setTimeout(() => {
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        // Initialize animations and showcase after login
+        initializeApp();
+      }, 2000);
+    });
+
+    function showLoginMessage(message, type) {
+      const messageDiv = document.getElementById('loginMessage');
+      messageDiv.textContent = message;
+      messageDiv.className = type;
+      messageDiv.style.display = 'block';
+
+      // Hide message after 5 seconds
+      setTimeout(() => {
+        messageDiv.style.display = 'none';
+      }, 5000);
+    }
+
+    // HTML Examples Array
+    const htmlExamples = [
+      {
+        title: 'Simple Button',
+        code: '<button style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Click Me</button>',
+        preview: '<button style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Click Me</button>'
+      },
+      {
+        title: 'Input Field',
+        code: '<input type="text" placeholder="Enter your name" style="padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 16px; outline: none;">',
+        preview: '<input type="text" placeholder="Enter your name" style="padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 16px; outline: none;">'
+      },
+      {
+        title: 'Modal Dialog',
+        code: '<button style="padding: 12px 24px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;" onclick="openModal()">Open Modal</button><div id="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;"><div style="background: white; padding: 20px; border-radius: 8px; max-width: 400px; width: 90%; position: relative;"><h3 style="margin-top: 0;">Modal Title</h3><p>This is a modal dialog. You can put any content here.</p><button style="padding: 8px 16px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;" onclick="closeModal()">Close</button></div></div><script>function openModal() { document.getElementById("modal").style.display = "flex"; } function closeModal() { document.getElementById("modal").style.display = "none"; } document.getElementById("modal").addEventListener("click", function(e) { if (e.target === this) { closeModal(); } });<\/script>',
+        preview: '<button style="padding: 12px 24px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;" onclick="openModal()">Open Modal</button><div id="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;"><div style="background: white; padding: 20px; border-radius: 8px; max-width: 400px; width: 90%; position: relative;"><h3 style="margin-top: 0;">Modal Title</h3><p>This is a modal dialog. You can put any content here.</p><button style="padding: 8px 16px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;" onclick="closeModal()">Close</button></div></div><script>function openModal() { document.getElementById("modal").style.display = "flex"; } function closeModal() { document.getElementById("modal").style.display = "none"; } document.getElementById("modal").addEventListener("click", function(e) { if (e.target === this) { closeModal(); } });<\/script>'
+      },
+      {
+        title: 'Navigation Menu',
+        code: '<nav style="background: #333; padding: 10px;"><ul style="list-style: none; margin: 0; padding: 0; display: flex;"><li style="margin-right: 20px;"><a href="#" style="color: white; text-decoration: none; padding: 10px; display: block;">Home</a></li><li style="margin-right: 20px;"><a href="#" style="color: white; text-decoration: none; padding: 10px; display: block;">About</a></li><li style="margin-right: 20px;"><a href="#" style="color: white; text-decoration: none; padding: 10px; display: block;">Contact</a></li></ul></nav>',
+        preview: '<nav style="background: #333; padding: 10px;"><ul style="list-style: none; margin: 0; padding: 0; display: flex;"><li style="margin-right: 20px;"><a href="#" style="color: white; text-decoration: none; padding: 10px; display: block;">Home</a></li><li style="margin-right: 20px;"><a href="#" style="color: white; text-decoration: none; padding: 10px; display: block;">About</a></li><li style="margin-right: 20px;"><a href="#" style="color: white; text-decoration: none; padding: 10px; display: block;">Contact</a></li></ul></nav>'
+      },
+      {
+        title: 'Card Component',
+        code: '<div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; max-width: 300px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"><h3 style="margin-top: 0; color: #333;">Card Title</h3><p style="color: #666; line-height: 1.5;">This is a simple card component with some content. Cards are great for displaying information in an organized way.</p><button style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Learn More</button></div>',
+        preview: '<div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; max-width: 300px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"><h3 style="margin-top: 0; color: #333;">Card Title</h3><p style="color: #666; line-height: 1.5;">This is a simple card component with some content. Cards are great for displaying information in an organized way.</p><button style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Learn More</button></div>'
+      }
+    ];
+
+    // Initialize the app after login
+    function initializeApp() {
+      // Generate HTML examples
+      const codeExamplesContainer = document.querySelector('.code-examples');
+      htmlExamples.forEach(example => {
+        const exampleDiv = document.createElement('div');
+        exampleDiv.className = 'code-example';
+        exampleDiv.innerHTML = `
+          <h4>${example.title}</h4>
+          <div class="code-preview">${example.preview}</div>
+          <div class="code-code">${example.code}<button class="copy-btn" onclick="copyCode(this)">📋 Copy</button></div>
+        `;
+        codeExamplesContainer.appendChild(exampleDiv);
+      });
+
+      // Initialize scroll animations
+      let lastScrollTop = 0;
+      const flyElements = document.querySelectorAll('.fly-element');
+
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        flyElements.forEach(element => {
+          const elementTop = element.offsetTop;
+          const elementHeight = element.offsetHeight;
+          const windowHeight = window.innerHeight;
+
+          if (scrollTop > lastScrollTop) {
+            // Scrolling down
+            if (scrollTop + windowHeight / 2 > elementTop + elementHeight / 2) {
+              element.classList.add('fly-away');
+              element.classList.remove('fly-back');
+            }
+          } else if (scrollTop < lastScrollTop) {
+            // Scrolling up
+            if (scrollTop + windowHeight / 2 < elementTop + elementHeight / 2) {
+              element.classList.add('fly-back');
+              element.classList.remove('fly-away');
+            }
+          }
+        });
+
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+      });
+
+      // Check for YouTube iframe errors
+      const iframes = document.querySelectorAll('iframe');
+      iframes.forEach(iframe => {
+        iframe.addEventListener('error', function() {
+          console.log('YouTube iframe failed to load:', this.src);
+          // Create fallback content
+          const fallback = document.createElement('div');
+          fallback.style.cssText = 'width: 100%; height: 200px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; border: 2px dashed #ccc;';
+          fallback.innerHTML = '<p style="text-align: center; color: #666;">Video failed to load.<br><a href="' + this.src.replace('embed/', 'watch?v=') + '" target="_blank" style="color: #007bff;">Watch on YouTube</a></p>';
+          this.parentNode.replaceChild(fallback, this);
+        });
+
+        iframe.addEventListener('load', function() {
+          console.log('YouTube iframe loaded successfully:', this.src);
+        });
+      });
+    }
+
+    // Copy code function
+    function copyCode(button) {
+      const codeElement = button.parentElement;
+      const code = codeElement.textContent.replace('📋 Copy', '').trim();
+      navigator.clipboard.writeText(code).then(() => {
+        button.textContent = '✅ Copied!';
+        button.style.background = '#28a745';
+        setTimeout(() => {
+          button.textContent = '📋 Copy';
+          button.style.background = '#007acc';
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+        button.textContent = '❌ Failed';
+        setTimeout(() => {
+          button.textContent = '📋 Copy';
+        }, 2000);
+      });
+    }
+
+    // Animated Counters for Stats Section
+    function animateCounters() {
+      const counters = document.querySelectorAll('.stat-number');
+      const speed = 200; // The lower the number, the faster the animation
+
+      counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        const increment = target / speed;
+
+        const updateCount = () => {
+          const count = +counter.innerText;
+          if (count < target) {
+            counter.innerText = Math.ceil(count + increment);
+            setTimeout(updateCount, 1);
+          } else {
+            counter.innerText = target.toLocaleString(); // Format with commas
+          }
+        };
+
+        updateCount();
+      });
+    }
+
+    // Trigger counter animation when stats section comes into view
+    function handleIntersection(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounters();
+          observer.unobserve(entry.target); // Only animate once
+        }
+      });
+    }
+
+    const observer = new IntersectionObserver(handleIntersection, {
+      threshold: 0.5
+    });
+
+    // Observe the stats section
+    const statsSection = document.querySelector('.stats');
+    if (statsSection) {
+      observer.observe(statsSection);
+    }
+
+    // Contact Form Handling
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('contactName').value;
+        const email = document.getElementById('contactEmail').value;
+        const subject = document.getElementById('contactSubject').value;
+        const message = document.getElementById('contactMessage').value;
+
+        // Simple form validation
+        if (!name || !email || !subject || !message) {
+          alert('Please fill in all fields.');
+          return;
+        }
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          alert('Please enter a valid email address.');
+          return;
+        }
+
+        // Simulate form submission (in a real application, this would send to a server)
+        alert(`Thank you for your message, ${name}! We'll get back to you soon.`);
+
+        // Reset form
+        contactForm.reset();
+      });
+    }
+
+    // Enhanced scroll animations with stagger effect
+    function handleScrollAnimations() {
+      const flyElements = document.querySelectorAll('.fly-element');
+
+      flyElements.forEach((element, index) => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementBottom = element.getBoundingClientRect().bottom;
+        const windowHeight = window.innerHeight;
+
+        if (elementTop < windowHeight * 0.8 && elementBottom > 0) {
+          // Add staggered animation delay
+          setTimeout(() => {
+            element.classList.add('visible');
+          }, index * 100); // 100ms delay between each element
+        }
+      });
+    }
+
+    // FAQ Accordion Functionality
+    function initializeFAQ() {
+      const faqItems = document.querySelectorAll('.faq-item');
+
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        question.addEventListener('click', () => {
+          // Close other FAQ items
+          faqItems.forEach(otherItem => {
+            if (otherItem !== item) {
+              otherItem.classList.remove('active');
+            }
+          });
+
+          // Toggle current item
+          item.classList.toggle('active');
+        });
+      });
+    }
+
+    // Newsletter Form Handling
+    const newsletterForm = document.getElementById('newsletterForm');
+    if (newsletterForm) {
+      newsletterForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('newsletterEmail').value;
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          alert('Please enter a valid email address.');
+          return;
+        }
+
+        // Simulate newsletter subscription
+        alert(`Thank you for subscribing! We'll send updates to ${email}.`);
+
+        // Reset form
+        newsletterForm.reset();
+      });
+    }
+
+    // Initialize FAQ when page loads
+    initializeFAQ();
+
+    // Initial check and scroll listener
+    handleScrollAnimations();
+    window.addEventListener('scroll', handleScrollAnimations);
+  </script>
+</body>
+</html>
